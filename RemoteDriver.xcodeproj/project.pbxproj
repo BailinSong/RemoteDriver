@@ -1,0 +1,602 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		07F976F2287580990029DF40 /* RemoteDriverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F976F1287580990029DF40 /* RemoteDriverApp.swift */; };
+		07F976F4287580990029DF40 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F976F3287580990029DF40 /* ContentView.swift */; };
+		07F976F62875809C0029DF40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07F976F52875809C0029DF40 /* Assets.xcassets */; };
+		07F976F92875809C0029DF40 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07F976F82875809C0029DF40 /* Preview Assets.xcassets */; };
+		07F976FB2875809C0029DF40 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F976FA2875809C0029DF40 /* Persistence.swift */; };
+		07F976FE2875809C0029DF40 /* RemoteDriver.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07F976FC2875809C0029DF40 /* RemoteDriver.xcdatamodeld */; };
+		07F977092875809C0029DF40 /* RemoteDriverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F977082875809C0029DF40 /* RemoteDriverTests.swift */; };
+		07F977132875809C0029DF40 /* RemoteDriverUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F977122875809C0029DF40 /* RemoteDriverUITests.swift */; };
+		07F977152875809C0029DF40 /* RemoteDriverUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F977142875809C0029DF40 /* RemoteDriverUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		07F977052875809C0029DF40 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07F976E6287580990029DF40 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 07F976ED287580990029DF40;
+			remoteInfo = RemoteDriver;
+		};
+		07F9770F2875809C0029DF40 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07F976E6287580990029DF40 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 07F976ED287580990029DF40;
+			remoteInfo = RemoteDriver;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		07F976EE287580990029DF40 /* RemoteDriver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemoteDriver.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07F976F1287580990029DF40 /* RemoteDriverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDriverApp.swift; sourceTree = "<group>"; };
+		07F976F3287580990029DF40 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		07F976F52875809C0029DF40 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		07F976F82875809C0029DF40 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		07F976FA2875809C0029DF40 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		07F976FD2875809C0029DF40 /* RemoteDriver.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RemoteDriver.xcdatamodel; sourceTree = "<group>"; };
+		07F976FF2875809C0029DF40 /* RemoteDriver.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RemoteDriver.entitlements; sourceTree = "<group>"; };
+		07F977042875809C0029DF40 /* RemoteDriverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RemoteDriverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		07F977082875809C0029DF40 /* RemoteDriverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDriverTests.swift; sourceTree = "<group>"; };
+		07F9770E2875809C0029DF40 /* RemoteDriverUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RemoteDriverUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		07F977122875809C0029DF40 /* RemoteDriverUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDriverUITests.swift; sourceTree = "<group>"; };
+		07F977142875809C0029DF40 /* RemoteDriverUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDriverUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		07F976EB287580990029DF40 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07F977012875809C0029DF40 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07F9770B2875809C0029DF40 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		07F976E5287580990029DF40 = {
+			isa = PBXGroup;
+			children = (
+				07F976F0287580990029DF40 /* RemoteDriver */,
+				07F977072875809C0029DF40 /* RemoteDriverTests */,
+				07F977112875809C0029DF40 /* RemoteDriverUITests */,
+				07F976EF287580990029DF40 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		07F976EF287580990029DF40 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				07F976EE287580990029DF40 /* RemoteDriver.app */,
+				07F977042875809C0029DF40 /* RemoteDriverTests.xctest */,
+				07F9770E2875809C0029DF40 /* RemoteDriverUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		07F976F0287580990029DF40 /* RemoteDriver */ = {
+			isa = PBXGroup;
+			children = (
+				07F976F1287580990029DF40 /* RemoteDriverApp.swift */,
+				07F976F3287580990029DF40 /* ContentView.swift */,
+				07F976F52875809C0029DF40 /* Assets.xcassets */,
+				07F976FA2875809C0029DF40 /* Persistence.swift */,
+				07F976FF2875809C0029DF40 /* RemoteDriver.entitlements */,
+				07F976FC2875809C0029DF40 /* RemoteDriver.xcdatamodeld */,
+				07F976F72875809C0029DF40 /* Preview Content */,
+			);
+			path = RemoteDriver;
+			sourceTree = "<group>";
+		};
+		07F976F72875809C0029DF40 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				07F976F82875809C0029DF40 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		07F977072875809C0029DF40 /* RemoteDriverTests */ = {
+			isa = PBXGroup;
+			children = (
+				07F977082875809C0029DF40 /* RemoteDriverTests.swift */,
+			);
+			path = RemoteDriverTests;
+			sourceTree = "<group>";
+		};
+		07F977112875809C0029DF40 /* RemoteDriverUITests */ = {
+			isa = PBXGroup;
+			children = (
+				07F977122875809C0029DF40 /* RemoteDriverUITests.swift */,
+				07F977142875809C0029DF40 /* RemoteDriverUITestsLaunchTests.swift */,
+			);
+			path = RemoteDriverUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		07F976ED287580990029DF40 /* RemoteDriver */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07F977182875809C0029DF40 /* Build configuration list for PBXNativeTarget "RemoteDriver" */;
+			buildPhases = (
+				07F976EA287580990029DF40 /* Sources */,
+				07F976EB287580990029DF40 /* Frameworks */,
+				07F976EC287580990029DF40 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RemoteDriver;
+			productName = RemoteDriver;
+			productReference = 07F976EE287580990029DF40 /* RemoteDriver.app */;
+			productType = "com.apple.product-type.application";
+		};
+		07F977032875809C0029DF40 /* RemoteDriverTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07F9771B2875809C0029DF40 /* Build configuration list for PBXNativeTarget "RemoteDriverTests" */;
+			buildPhases = (
+				07F977002875809C0029DF40 /* Sources */,
+				07F977012875809C0029DF40 /* Frameworks */,
+				07F977022875809C0029DF40 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				07F977062875809C0029DF40 /* PBXTargetDependency */,
+			);
+			name = RemoteDriverTests;
+			productName = RemoteDriverTests;
+			productReference = 07F977042875809C0029DF40 /* RemoteDriverTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		07F9770D2875809C0029DF40 /* RemoteDriverUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07F9771E2875809C0029DF40 /* Build configuration list for PBXNativeTarget "RemoteDriverUITests" */;
+			buildPhases = (
+				07F9770A2875809C0029DF40 /* Sources */,
+				07F9770B2875809C0029DF40 /* Frameworks */,
+				07F9770C2875809C0029DF40 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				07F977102875809C0029DF40 /* PBXTargetDependency */,
+			);
+			name = RemoteDriverUITests;
+			productName = RemoteDriverUITests;
+			productReference = 07F9770E2875809C0029DF40 /* RemoteDriverUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		07F976E6287580990029DF40 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1340;
+				LastUpgradeCheck = 1340;
+				TargetAttributes = {
+					07F976ED287580990029DF40 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					07F977032875809C0029DF40 = {
+						CreatedOnToolsVersion = 13.4.1;
+						TestTargetID = 07F976ED287580990029DF40;
+					};
+					07F9770D2875809C0029DF40 = {
+						CreatedOnToolsVersion = 13.4.1;
+						TestTargetID = 07F976ED287580990029DF40;
+					};
+				};
+			};
+			buildConfigurationList = 07F976E9287580990029DF40 /* Build configuration list for PBXProject "RemoteDriver" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 07F976E5287580990029DF40;
+			productRefGroup = 07F976EF287580990029DF40 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				07F976ED287580990029DF40 /* RemoteDriver */,
+				07F977032875809C0029DF40 /* RemoteDriverTests */,
+				07F9770D2875809C0029DF40 /* RemoteDriverUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		07F976EC287580990029DF40 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07F976F92875809C0029DF40 /* Preview Assets.xcassets in Resources */,
+				07F976F62875809C0029DF40 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07F977022875809C0029DF40 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07F9770C2875809C0029DF40 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		07F976EA287580990029DF40 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07F976FB2875809C0029DF40 /* Persistence.swift in Sources */,
+				07F976FE2875809C0029DF40 /* RemoteDriver.xcdatamodeld in Sources */,
+				07F976F4287580990029DF40 /* ContentView.swift in Sources */,
+				07F976F2287580990029DF40 /* RemoteDriverApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07F977002875809C0029DF40 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07F977092875809C0029DF40 /* RemoteDriverTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07F9770A2875809C0029DF40 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07F977152875809C0029DF40 /* RemoteDriverUITestsLaunchTests.swift in Sources */,
+				07F977132875809C0029DF40 /* RemoteDriverUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		07F977062875809C0029DF40 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 07F976ED287580990029DF40 /* RemoteDriver */;
+			targetProxy = 07F977052875809C0029DF40 /* PBXContainerItemProxy */;
+		};
+		07F977102875809C0029DF40 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 07F976ED287580990029DF40 /* RemoteDriver */;
+			targetProxy = 07F9770F2875809C0029DF40 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		07F977162875809C0029DF40 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		07F977172875809C0029DF40 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		07F977192875809C0029DF40 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RemoteDriver/RemoteDriver.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"RemoteDriver/Preview Content\"";
+				DEVELOPMENT_TEAM = 3A9CC9QR33;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ooo.reindeer.RemoteDriver;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		07F9771A2875809C0029DF40 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RemoteDriver/RemoteDriver.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"RemoteDriver/Preview Content\"";
+				DEVELOPMENT_TEAM = 3A9CC9QR33;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ooo.reindeer.RemoteDriver;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		07F9771C2875809C0029DF40 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3A9CC9QR33;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ooo.reindeer.RemoteDriverTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RemoteDriver.app/Contents/MacOS/RemoteDriver";
+			};
+			name = Debug;
+		};
+		07F9771D2875809C0029DF40 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3A9CC9QR33;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ooo.reindeer.RemoteDriverTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RemoteDriver.app/Contents/MacOS/RemoteDriver";
+			};
+			name = Release;
+		};
+		07F9771F2875809C0029DF40 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3A9CC9QR33;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ooo.reindeer.RemoteDriverUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = RemoteDriver;
+			};
+			name = Debug;
+		};
+		07F977202875809C0029DF40 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3A9CC9QR33;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ooo.reindeer.RemoteDriverUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = RemoteDriver;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		07F976E9287580990029DF40 /* Build configuration list for PBXProject "RemoteDriver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07F977162875809C0029DF40 /* Debug */,
+				07F977172875809C0029DF40 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07F977182875809C0029DF40 /* Build configuration list for PBXNativeTarget "RemoteDriver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07F977192875809C0029DF40 /* Debug */,
+				07F9771A2875809C0029DF40 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07F9771B2875809C0029DF40 /* Build configuration list for PBXNativeTarget "RemoteDriverTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07F9771C2875809C0029DF40 /* Debug */,
+				07F9771D2875809C0029DF40 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07F9771E2875809C0029DF40 /* Build configuration list for PBXNativeTarget "RemoteDriverUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07F9771F2875809C0029DF40 /* Debug */,
+				07F977202875809C0029DF40 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		07F976FC2875809C0029DF40 /* RemoteDriver.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				07F976FD2875809C0029DF40 /* RemoteDriver.xcdatamodel */,
+			);
+			currentVersion = 07F976FD2875809C0029DF40 /* RemoteDriver.xcdatamodel */;
+			path = RemoteDriver.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 07F976E6287580990029DF40 /* Project object */;
+}
