@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FileProvider
 
 @main
 struct RemoteDriverApp: App {
@@ -16,5 +17,9 @@ struct RemoteDriverApp: App {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
+    }
+    
+    init() {
+        
     }
 }

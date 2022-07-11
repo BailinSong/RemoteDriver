@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07B3090C2877D60400C5FD3D /* AliSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F977692876FEFB0029DF40 /* AliSDK.swift */; };
 		07F976F2287580990029DF40 /* RemoteDriverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F976F1287580990029DF40 /* RemoteDriverApp.swift */; };
 		07F976F4287580990029DF40 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F976F3287580990029DF40 /* ContentView.swift */; };
 		07F976F62875809C0029DF40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07F976F52875809C0029DF40 /* Assets.xcassets */; };
@@ -16,6 +17,16 @@
 		07F977092875809C0029DF40 /* RemoteDriverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F977082875809C0029DF40 /* RemoteDriverTests.swift */; };
 		07F977132875809C0029DF40 /* RemoteDriverUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F977122875809C0029DF40 /* RemoteDriverUITests.swift */; };
 		07F977152875809C0029DF40 /* RemoteDriverUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F977142875809C0029DF40 /* RemoteDriverUITestsLaunchTests.swift */; };
+		07F97748287664060029DF40 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07F977292875873C0029DF40 /* UniformTypeIdentifiers.framework */; };
+		07F9774B287664060029DF40 /* FileProviderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F9774A287664060029DF40 /* FileProviderExtension.swift */; };
+		07F9774D287664060029DF40 /* FileProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F9774C287664060029DF40 /* FileProviderItem.swift */; };
+		07F9774F287664060029DF40 /* FileProviderEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F9774E287664060029DF40 /* FileProviderEnumerator.swift */; };
+		07F97754287664060029DF40 /* AliYunPan.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 07F97747287664060029DF40 /* AliYunPan.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		07F97759287676580029DF40 /* FileProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07F97758287676580029DF40 /* FileProvider.framework */; };
+		07F9775A2876767F0029DF40 /* FileProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07F97758287676580029DF40 /* FileProvider.framework */; };
+		07F9776A2876FEFB0029DF40 /* AliSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F977692876FEFB0029DF40 /* AliSDK.swift */; };
+		07F9776D2876FF780029DF40 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 07F9776C2876FF780029DF40 /* Alamofire */; };
+		07F977702877AA140029DF40 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 07F9776F2877AA140029DF40 /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,7 +44,28 @@
 			remoteGlobalIDString = 07F976ED287580990029DF40;
 			remoteInfo = RemoteDriver;
 		};
+		07F97752287664060029DF40 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07F976E6287580990029DF40 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 07F97746287664060029DF40;
+			remoteInfo = AliYunPan;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		07F9773A2875873C0029DF40 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				07F97754287664060029DF40 /* AliYunPan.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		07F976EE287580990029DF40 /* RemoteDriver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemoteDriver.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,6 +81,15 @@
 		07F9770E2875809C0029DF40 /* RemoteDriverUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RemoteDriverUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		07F977122875809C0029DF40 /* RemoteDriverUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDriverUITests.swift; sourceTree = "<group>"; };
 		07F977142875809C0029DF40 /* RemoteDriverUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDriverUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		07F977292875873C0029DF40 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
+		07F97747287664060029DF40 /* AliYunPan.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AliYunPan.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		07F9774A287664060029DF40 /* FileProviderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderExtension.swift; sourceTree = "<group>"; };
+		07F9774C287664060029DF40 /* FileProviderItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderItem.swift; sourceTree = "<group>"; };
+		07F9774E287664060029DF40 /* FileProviderEnumerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderEnumerator.swift; sourceTree = "<group>"; };
+		07F97750287664060029DF40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07F97751287664060029DF40 /* AliYunPan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AliYunPan.entitlements; sourceTree = "<group>"; };
+		07F97758287676580029DF40 /* FileProvider.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FileProvider.framework; path = System/Library/Frameworks/FileProvider.framework; sourceTree = SDKROOT; };
+		07F977692876FEFB0029DF40 /* AliSDK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AliSDK.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +97,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07F97759287676580029DF40 /* FileProvider.framework in Frameworks */,
+				07F9776D2876FF780029DF40 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,15 +116,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		07F97744287664060029DF40 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07F977702877AA140029DF40 /* Alamofire in Frameworks */,
+				07F97748287664060029DF40 /* UniformTypeIdentifiers.framework in Frameworks */,
+				07F9775A2876767F0029DF40 /* FileProvider.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		07F976E5287580990029DF40 = {
 			isa = PBXGroup;
 			children = (
+				07F97721287586AC0029DF40 /* Packages */,
 				07F976F0287580990029DF40 /* RemoteDriver */,
 				07F977072875809C0029DF40 /* RemoteDriverTests */,
 				07F977112875809C0029DF40 /* RemoteDriverUITests */,
+				07F97749287664060029DF40 /* AliYunPan */,
+				07F977282875873C0029DF40 /* Frameworks */,
 				07F976EF287580990029DF40 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -92,6 +148,7 @@
 				07F976EE287580990029DF40 /* RemoteDriver.app */,
 				07F977042875809C0029DF40 /* RemoteDriverTests.xctest */,
 				07F9770E2875809C0029DF40 /* RemoteDriverUITests.xctest */,
+				07F97747287664060029DF40 /* AliYunPan.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,6 +192,36 @@
 			path = RemoteDriverUITests;
 			sourceTree = "<group>";
 		};
+		07F97721287586AC0029DF40 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Packages;
+			sourceTree = SOURCE_ROOT;
+			usesTabs = 0;
+		};
+		07F977282875873C0029DF40 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				07F97758287676580029DF40 /* FileProvider.framework */,
+				07F977292875873C0029DF40 /* UniformTypeIdentifiers.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		07F97749287664060029DF40 /* AliYunPan */ = {
+			isa = PBXGroup;
+			children = (
+				07F977692876FEFB0029DF40 /* AliSDK.swift */,
+				07F9774A287664060029DF40 /* FileProviderExtension.swift */,
+				07F9774C287664060029DF40 /* FileProviderItem.swift */,
+				07F9774E287664060029DF40 /* FileProviderEnumerator.swift */,
+				07F97750287664060029DF40 /* Info.plist */,
+				07F97751287664060029DF40 /* AliYunPan.entitlements */,
+			);
+			path = AliYunPan;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -145,12 +232,17 @@
 				07F976EA287580990029DF40 /* Sources */,
 				07F976EB287580990029DF40 /* Frameworks */,
 				07F976EC287580990029DF40 /* Resources */,
+				07F9773A2875873C0029DF40 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				07F97753287664060029DF40 /* PBXTargetDependency */,
 			);
 			name = RemoteDriver;
+			packageProductDependencies = (
+				07F9776C2876FF780029DF40 /* Alamofire */,
+			);
 			productName = RemoteDriver;
 			productReference = 07F976EE287580990029DF40 /* RemoteDriver.app */;
 			productType = "com.apple.product-type.application";
@@ -191,6 +283,26 @@
 			productReference = 07F9770E2875809C0029DF40 /* RemoteDriverUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		07F97746287664060029DF40 /* AliYunPan */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07F97755287664060029DF40 /* Build configuration list for PBXNativeTarget "AliYunPan" */;
+			buildPhases = (
+				07F97743287664060029DF40 /* Sources */,
+				07F97744287664060029DF40 /* Frameworks */,
+				07F97745287664060029DF40 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AliYunPan;
+			packageProductDependencies = (
+				07F9776F2877AA140029DF40 /* Alamofire */,
+			);
+			productName = AliYunPan;
+			productReference = 07F97747287664060029DF40 /* AliYunPan.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -212,6 +324,9 @@
 						CreatedOnToolsVersion = 13.4.1;
 						TestTargetID = 07F976ED287580990029DF40;
 					};
+					07F97746287664060029DF40 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
 				};
 			};
 			buildConfigurationList = 07F976E9287580990029DF40 /* Build configuration list for PBXProject "RemoteDriver" */;
@@ -223,6 +338,9 @@
 				Base,
 			);
 			mainGroup = 07F976E5287580990029DF40;
+			packageReferences = (
+				07F9776B2876FF780029DF40 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = 07F976EF287580990029DF40 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -230,6 +348,7 @@
 				07F976ED287580990029DF40 /* RemoteDriver */,
 				07F977032875809C0029DF40 /* RemoteDriverTests */,
 				07F9770D2875809C0029DF40 /* RemoteDriverUITests */,
+				07F97746287664060029DF40 /* AliYunPan */,
 			);
 		};
 /* End PBXProject section */
@@ -258,6 +377,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		07F97745287664060029DF40 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -265,6 +391,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07B3090C2877D60400C5FD3D /* AliSDK.swift in Sources */,
 				07F976FB2875809C0029DF40 /* Persistence.swift in Sources */,
 				07F976FE2875809C0029DF40 /* RemoteDriver.xcdatamodeld in Sources */,
 				07F976F4287580990029DF40 /* ContentView.swift in Sources */,
@@ -289,6 +416,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		07F97743287664060029DF40 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07F9774B287664060029DF40 /* FileProviderExtension.swift in Sources */,
+				07F9774D287664060029DF40 /* FileProviderItem.swift in Sources */,
+				07F9774F287664060029DF40 /* FileProviderEnumerator.swift in Sources */,
+				07F9776A2876FEFB0029DF40 /* AliSDK.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -301,6 +439,11 @@
 			isa = PBXTargetDependency;
 			target = 07F976ED287580990029DF40 /* RemoteDriver */;
 			targetProxy = 07F9770F2875809C0029DF40 /* PBXContainerItemProxy */;
+		};
+		07F97753287664060029DF40 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 07F97746287664060029DF40 /* AliYunPan */;
+			targetProxy = 07F97752287664060029DF40 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -355,7 +498,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -409,7 +552,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -421,6 +564,7 @@
 		07F977192875809C0029DF40 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RemoteDriver/RemoteDriver.entitlements;
@@ -448,6 +592,7 @@
 		07F9771A2875809C0029DF40 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RemoteDriver/RemoteDriver.entitlements;
@@ -481,7 +626,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3A9CC9QR33;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ooo.reindeer.RemoteDriverTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -500,7 +645,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3A9CC9QR33;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ooo.reindeer.RemoteDriverTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -544,6 +689,58 @@
 			};
 			name = Release;
 		};
+		07F97756287664060029DF40 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AliYunPan/AliYunPan.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3A9CC9QR33;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AliYunPan/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AliYunPan;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ooo.reindeer.RemoteDriver.AliYunPan;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		07F97757287664060029DF40 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AliYunPan/AliYunPan.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3A9CC9QR33;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AliYunPan/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AliYunPan;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ooo.reindeer.RemoteDriver.AliYunPan;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -583,7 +780,40 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		07F97755287664060029DF40 /* Build configuration list for PBXNativeTarget "AliYunPan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07F97756287664060029DF40 /* Debug */,
+				07F97757287664060029DF40 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		07F9776B2876FF780029DF40 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://gitee.com/snowasnow/Alamofire.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		07F9776C2876FF780029DF40 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07F9776B2876FF780029DF40 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		07F9776F2877AA140029DF40 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07F9776B2876FF780029DF40 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		07F976FC2875809C0029DF40 /* RemoteDriver.xcdatamodeld */ = {
