@@ -178,45 +178,18 @@ public class AliSDK{
     }
     
     public static func _post<D: Decodable,E:Encodable>(url:String,parameters:E?,responseType:D.Type,headers:HTTPHeaders?)->D?{
-        let decoder=JSONDecoder()
         
-        var newheaders=getAuthHeaders()
-
-        headers?.forEach{
-            header in
-            newheaders.add(name: header.name, value: header.value)
-        }
-
-        newheaders.add(name: "content-type", value: "application/json;charset-utf-8")
-        
-        let response=AF.request(url, method: HTTPMethod.post, parameters: parameters, encoder: JSONParameterEncoder(), headers: newheaders)
         
         var  returnResult:D?
-        
-        
         let semaphore = DispatchSemaphore(value: 0)
-       
-        response.responseString{ afData in
-            let str=try!afData.result.get()
-            
-            printLog(message: "json:"+str)
-            
-            do {
-
-                let result = try decoder.decode(responseType, from: (str.data(using: .utf8))!)
-                returnResult=result
-
-            } catch{
-                printLog(message: str)
-            }
-            
-            
+        _postAsync(url: url, parameters: parameters, responseType: responseType, headers: headers) { response in
+            returnResult=response
             semaphore.signal()
         }
-        
         semaphore.wait()
     
         return returnResult
+
     }
     
     public static func _postAsync<D: Decodable,E:Encodable>(url:String,parameters:E?,responseType:D.Type,headers:HTTPHeaders?,completionHandler: @escaping (D) -> Void){
