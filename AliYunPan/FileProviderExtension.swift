@@ -26,7 +26,7 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
         if NSFileProviderItemIdentifier.rootContainer == identifier {
             AliSDK.printLog(message: identifier.rawValue)
             let drive = AliSDK.defaultDrive()
-            let fileInfo=AliSDK.file(driveId: (drive?.drive_id!)!, fileId: "root")
+            let fileInfo = AliSDK.file(driveId: (drive?.drive_id!)!, fileId: "root")
             completionHandler(FileProviderItem(identifier: identifier,fileInfo: fileInfo!), nil)
         }else if NSFileProviderItemIdentifier.trashContainer == identifier {
             
@@ -40,13 +40,13 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
             fileInfo.type="folder"
             fileInfo.status="Available"
             completionHandler(FileProviderItem(identifier: identifier,fileInfo: fileInfo), nil)
-        }else if identifier.rawValue.starts(with: "{"){
+        }else if NSFileProviderItemIdentifier.workingSet == identifier{
+            
+        } else{
             AliSDK.printLog(message: identifier.rawValue)
-            let itemId=try!JSONDecoder().decode([String:String].self, from: identifier.rawValue.data(using: .utf8)!)
-            let fileInfo=AliSDK.file(driveId: itemId["did"]!, fileId: itemId["fid"]!)
+//            let itemId=try!JSONDecoder().decode([String:String].self, from: identifier.rawValue.data(using: .utf8)!)
+            let fileInfo=AliSDK.file(driveId: identifier.driveId, fileId: identifier.fileId)
             completionHandler(FileProviderItem(identifier: identifier,fileInfo: fileInfo!), nil)
-        }else{
-            AliSDK.printLog(message: identifier.rawValue)
         }
         
         
@@ -58,19 +58,47 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     func fetchContents(for itemIdentifier: NSFileProviderItemIdentifier, version requestedVersion: NSFileProviderItemVersion?, request: NSFileProviderRequest, completionHandler: @escaping (URL?, NSFileProviderItem?, Error?) -> Void) -> Progress {
         // TODO: implement fetching of the contents for the itemIdentifier at the specified version
         
-        completionHandler(nil, nil, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
-        return Progress()
+        let progress=Progress()
+        
+        let fileInfo=AliSDK.file(driveId: itemIdentifier.driveId, fileId: itemIdentifier.fileId)
+        _=try! AliSDK.download(driveId: itemIdentifier.driveId, fileId: itemIdentifier.fileId, progress: progress,completionHandler: { url, driveId,fileId, err in
+            
+            completionHandler(url, FileProviderItem(identifier: itemIdentifier,fileInfo: fileInfo!),nil)
+        })
+        
+        
+//        completionHandler(url, nil, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+        
+        return progress
     }
     
     func createItem(basedOn itemTemplate: NSFileProviderItem, fields: NSFileProviderItemFields, contents url: URL?, options: NSFileProviderCreateItemOptions = [], request: NSFileProviderRequest, completionHandler: @escaping (NSFileProviderItem?, NSFileProviderItemFields, Bool, Error?) -> Void) -> Progress {
         // TODO: a new item was created on disk, process the item's creation
         
-        completionHandler(itemTemplate, [], false, nil)
-        return Progress()
+        AliSDK.printLog(message: itemTemplate.contentType)
+        
+                
+        var progress=Progress()
+        
+        AliSDK.create(
+            fileName: itemTemplate.filename,
+            parentFileId: itemTemplate.parentItemIdentifier == NSFileProviderItemIdentifier.rootContainer ? "root" : itemTemplate.parentItemIdentifier.fileId,
+            type: url==nil ?"folder":"file",
+            contentType: itemTemplate.contentType?.description,
+            size: (itemTemplate.documentSize ?? nil) as? Int64,
+            content: url,
+            progress: progress) { fileInfo, error in
+                completionHandler(FileProviderItem(identifier: .init(driveId: fileInfo.drive_id!, fileId: fileInfo.file_id!), fileInfo: fileInfo), [], false, nil)
+            }
+        
+        
+        return progress
     }
     
     func modifyItem(_ item: NSFileProviderItem, baseVersion version: NSFileProviderItemVersion, changedFields: NSFileProviderItemFields, contents newContents: URL?, options: NSFileProviderModifyItemOptions = [], request: NSFileProviderRequest, completionHandler: @escaping (NSFileProviderItem?, NSFileProviderItemFields, Bool, Error?) -> Void) -> Progress {
         // TODO: an item was modified on disk, process the item's modification
+        
+        
         
         completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
         return Progress()

@@ -7,9 +7,13 @@
 
 import Foundation
 import Alamofire
+import FileProvider
+import SwiftUI
 
 @available(macOS 12.0, *)
 public class AliSDK{
+    
+    public static let DOMAIN:NSFileProviderDomain = NSFileProviderDomain(identifier: NSFileProviderDomainIdentifier(rawValue: "Aliyunpan") ,displayName: "阿里云盘")
     
     public static func printLog<T>(message: T,
                                    file: String = #file,
@@ -133,11 +137,7 @@ public class AliSDK{
     public static func _get<D: Decodable,E:Encodable>(url:String,parameters:E?,tokenType:String?,accessToken:String?,responseType:D.Type,headers:HTTPHeaders?)->D?{
         let decoder=JSONDecoder()
         
-        var newheaders=HTTPHeaders()
-        
-        if(tokenType != nil && accessToken != nil){
-            newheaders.add(name: "authorization", value: tokenType!+" "+accessToken!)
-        }
+        var newheaders=getAuthHeaders()
         
         headers?.forEach{
             header in
@@ -166,34 +166,28 @@ public class AliSDK{
         return returnResult
     }
     
+    
+    public static func getAuthHeaders()->HTTPHeaders{
+        var newheaders:HTTPHeaders=HTTPHeaders()
+         
+         if(userData.value(forKey: "tokenType") != nil && userData.value(forKey: "accessToken") != nil){
+             newheaders.add(name: "authorization", value: (userData.value(forKey: "tokenType") as! String) + " " + (userData.value(forKey: "accessToken") as! String))
+         }
+        
+        return newheaders
+    }
+    
     public static func _post<D: Decodable,E:Encodable>(url:String,parameters:E?,responseType:D.Type,headers:HTTPHeaders?)->D?{
         let decoder=JSONDecoder()
         
-        var newheaders=HTTPHeaders()
-        
-//        newheaders.add(name: "authorization", value: """
-//Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhN2U4OGYyMzBkOWU0OWM5YmU2YTI2MWU4OGEyZTFkZiIsImN1c3RvbUpzb24iOiJ7XCJjbGllbnRJZFwiOlwicEpaSW5OSE4yZFpXazhxZ1wiLFwiZG9tYWluSWRcIjpcImJqMjlcIixcInNjb3BlXCI6W1wiRFJJVkUuQUxMXCIsXCJGSUxFLkFMTFwiLFwiVklFVy5BTExcIixcIlNIQVJFLkFMTFwiLFwiU1RPUkFHRS5BTExcIixcIlNUT1JBR0VGSUxFLkxJU1RcIixcIlVTRVIuQUxMXCIsXCJCQVRDSFwiLFwiQUNDT1VOVC5BTExcIixcIklNQUdFLkFMTFwiLFwiSU5WSVRFLkFMTFwiXSxcInJvbGVcIjpcInVzZXJcIixcInJlZlwiOlwiXCIsXCJkZXZpY2VfaWRcIjpcIjI1MTQ4ZDU3NmYyOTQ4YjE4ZDA4MGUzNzMwYzNiMDI5XCJ9IiwiZXhwIjoxNjU3NTA1NDAwLCJpYXQiOjE2NTc0OTgxNDB9.Gk4PQsJXJy-u9KILakza4OLGAzPJOzEjgct8mcwxwPGZ1KXdKxod5WX5fFB5WrIrrWWD4c4rc-V9lEEbA21qLVCyaWUlNt9GlcDIZH4_TIHbid_ZjfAsMLRsQToUm7k3SMDTPNeWx4CI4_NcqxO0NNtqS3hFIOj6uEzoceWwS90
-//""")
-        
-        if(userData.value(forKey: "tokenType") != nil && userData.value(forKey: "accessToken") != nil){
-            newheaders.add(name: "authorization", value: (userData.value(forKey: "tokenType") as! String) + " " + (userData.value(forKey: "accessToken") as! String))
-        }
-        
-        
-        
-        
-        
-        
+        var newheaders=getAuthHeaders()
+
         headers?.forEach{
             header in
             newheaders.add(name: header.name, value: header.value)
         }
-        
-        
-        
-        newheaders.add(name: "content-type", value: "application/json;charset-utf-8")
 
-        printLog(message: newheaders)
+        newheaders.add(name: "content-type", value: "application/json;charset-utf-8")
         
         let response=AF.request(url, method: HTTPMethod.post, parameters: parameters, encoder: JSONParameterEncoder(), headers: newheaders)
         
@@ -205,13 +199,14 @@ public class AliSDK{
         response.responseString{ afData in
             let str=try!afData.result.get()
             
+            printLog(message: "json:"+str)
             
             do {
 
-                let result = try! decoder.decode(responseType, from: (str.data(using: .utf8))!)
+                let result = try decoder.decode(responseType, from: (str.data(using: .utf8))!)
                 returnResult=result
 
-            } catch {
+            } catch{
                 printLog(message: str)
             }
             
@@ -224,6 +219,38 @@ public class AliSDK{
         return returnResult
     }
     
+    public static func _postAsync<D: Decodable,E:Encodable>(url:String,parameters:E?,responseType:D.Type,headers:HTTPHeaders?,completionHandler: @escaping (D) -> Void){
+        let decoder=JSONDecoder()
+        
+        var newheaders=getAuthHeaders()
+
+        headers?.forEach{
+            header in
+            newheaders.add(name: header.name, value: header.value)
+        }
+
+        newheaders.add(name: "content-type", value: "application/json;charset-utf-8")
+        
+        printLog(message: newheaders)
+        
+        let response=AF.request(url, method: HTTPMethod.post, parameters: parameters, encoder: JSONParameterEncoder(), headers: newheaders)
+       
+        response.responseString{ afData in
+            let str=try!afData.result.get()
+            
+            printLog(message: "json:"+str)
+            
+            do {
+
+                let result = try decoder.decode(responseType, from: (str.data(using: .utf8))!)
+                
+                completionHandler(result)
+
+            } catch{
+                printLog(message: str)
+            }
+        }
+    }
 }
 
 public struct GeneratorQrCodeResult :Codable{
@@ -500,14 +527,14 @@ public struct Drive:Codable{
 }
 @available(macOS 12.0, *)
 extension AliSDK{
-    public static func defaultDrive()->Drive?{
+    public static func defaultDrive() -> Drive? {
         let response=_post(url: "https://api.aliyundrive.com/v2/drive/get_default_drive",parameters: ["default":""], responseType: Drive.self, headers: nil)
         printLog(message: response)
         return response
         
     }
     
-    public static func drive(driveId:String)->Drive?{
+    public static func drive(driveId:String) -> Drive? {
         let response=_post(url: "https://api.aliyundrive.com/v2/drive/get", parameters: [ "drive_id": driveId ], responseType: Drive.self, headers: nil)
         printLog(message: response)
         return response
@@ -709,6 +736,12 @@ extension AliSDK{
         
     }
     
+    public static func fileAsync(driveId:String,fileId:String,completionHandler: @escaping (FileInfo) -> Void){
+        _postAsync(url: "https://api.aliyundrive.com/v2/file/get", parameters: [ "drive_id": driveId, "file_id": fileId  ], responseType: FileInfo.self, headers: nil, completionHandler: completionHandler)
+        
+        
+    }
+    
     public static func listfile(driveId:String,parentFileId:String,nextMarker:String)->ListFiles?{
         
         var request=ListFileRequest(drive_id: driveId, parent_file_id: parentFileId,marker:nextMarker)
@@ -721,4 +754,246 @@ extension AliSDK{
     }
     
     
+}
+
+/**
+ 单个下载地址
+
+ GET: https://api.aliyundrive.com/v2/file/get_download_url
+
+ { "drive_id": "9600002", "expires_sec": 0, "file_id": "623b00000000d89ef21d4118838aed83de7575ba" }
+ Response:
+
+ {
+   "method": "GET",
+   "url": "https://bj29.cn-beijing.data.alicloudccp.com/2GhCur3G%2F...",
+   "internal_url": "https://bj29.cn-beijing.data.alicloudccp.com/2GhCur3G%2F...",
+   "expiration": "2022-03-22T14:54:28.057Z",
+   "size": 13,
+   "ratelimit": { "part_speed": -1, "part_size": -1 },
+   "crc64_hash": "1548000000008183211",
+   "content_hash": "4DBF0000000023E6E756C29AF6AC487217921D53",
+   "content_hash_name": "sha1"
+ }
+ */
+
+public struct DownloadInfo:Codable{
+    let method,url,internal_url,expiration,crc64_hash,content_hash,content_hash_name:String?
+    let size:Int64
+    let rateLimit:RateLimit?
+    
+    public struct RateLimit:Codable{
+        let part_speed,part_size:Int
+    }
+}
+
+
+extension AliSDK{
+    public static func download(driveId:String,fileId:String,
+                                progress: Progress,completionHandler: @escaping (URL?, String?,String?, Error?) -> Void) throws -> URL? {
+      
+           
+           if let response=_post(url: "https://api.aliyundrive.com/v2/file/get_download_url", parameters: ["drive_id":driveId,"expires_sec":"0","file_id":fileId], responseType: DownloadInfo.self, headers: nil){
+               progress.totalUnitCount=response.size
+//               let manager=NSFileProviderManager(for: AliSDK.DOMAIN)
+               
+               let cachesURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+               let fileURL = cachesURL.appendingPathComponent(driveId+":"+fileId+"."+(response.content_hash)!)
+               
+               printLog(message: fileURL)
+               let destination:DownloadRequest.Destination = {
+                   _, _ in
+                   return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+               }
+               
+               if let downloadUrl = response.url {
+                   
+                   
+                  var newheaders:HTTPHeaders=getAuthHeaders()
+                   
+                   let downloadRequest =  try! AF.download(downloadUrl, method: HTTPMethod.get, parameters: nil, headers: newheaders, interceptor: nil, to: destination)
+                   
+                   downloadRequest.downloadProgress { p in
+                       
+                       progress.completedUnitCount = p.completedUnitCount
+                       progress.totalUnitCount=p.totalUnitCount
+                       progress.fileTotalCount=p.fileTotalCount
+                       progress.fileURL=p.fileURL
+                       progress.fileCompletedCount=p.fileCompletedCount
+                                        
+                   }.responseData { (res) in
+//                       if let data = res.value {
+                           printLog(message:  res)
+                       
+                       printLog(message: progress.isFinished)
+                           completionHandler(fileURL,driveId,fileId,nil)
+//                       }
+                   }
+                   
+                   
+                   
+               }
+               
+               return fileURL
+               
+           }
+           return nil
+       
+   }
+    
+    
+}
+
+
+/**
+ var param=[
+//          "content_md5" : "E10ADC3949BA59ABBE56E057F20F883E",
+//          "content_type" : "application/json",
+     "name" : itemTemplate.filename,
+//          "part_info_list" : [ [
+//            "etag" : "0CC175B9C0F1B6A831C399E269772661",
+//            "part_number" : 1,
+//            "part_size" : 1024,
+//            "upload_url" : "https://pds.data.aliyuncs.com/xxx/xxx?Expires=xxx&OSSAccessKeyId=xxx&Signature=xxx&partNumber=1&uploadId=0CC175B9C0F1B6A831C399E269772661"
+//          ] ],
+     "size" : itemTemplate.documentSize ?? 0,
+     "type" : itemTemplate.contentType?.description,
+//          "auto_rename" : true,
+   "check_name_mode" : "string",
+//          "content_hash" : "7C4A8D09CA3762AF61E59520943DC26494F8941B",
+//          "content_hash_name" : "sha1",
+//          "description" : "file description",
+//          "drive_id" : "1",
+//          "encrypt_mode" : "string",
+//          "file_id" : "string",
+//          "hidden" : false,
+//          "labels" : [ "label1", "label2" ],
+//          "last_updated_at" : "2019-08-20T06:51:27.292Z",
+//          "meta" : "string",
+     "parent_file_id" : itemTemplate.parentItemIdentifier == NSFileProviderItemIdentifier.rootContainer ? "root" : itemTemplate.parentItemIdentifier.fileId,
+//          "pre_hash" : "E10ADC3949BA59ABBE56E057F20F883E",
+//          "streams_info" : [
+//            "string" : "[streaminfo](#streaminfo)"
+//          ],
+//          "user_meta" : "user_meta"
+ ] as [String : Any]
+ 
+ 
+ {
+   "domain_id" : "domain",
+   "drive_id" : "1",
+   "encrypt_mode" : "pin",
+   "file_id" : "5d79206586bb5dd69fb34c349282718146c55da7",
+   "file_name" : "test.txt",
+   "parent_file_id" : "root",
+   "part_info_list" : "[",
+   "rapid_upload" : false,
+   "streams_upload_info" : {
+     "string" : "[streamuploadinfo](#streamuploadinfo)"
+   },
+   "type" : "file",
+   "upload_id" : "C9DCFE5A82644AC7A02DB74C30C934A6"
+ }
+ */
+
+public struct UploadInfo:Codable{
+    var domain_id,drive_id,encrypt_mode,file_id,file_name,parent_file_id,type:String
+    var rapid_upload:Bool?
+    var part_info_list:[PartInfoList]?
+    var upload_id:String?
+    
+    
+}
+
+public struct PartInfoList:Codable{
+    var upload_url:String
+    var part_number,part_size:Int64?
+    var etag:String?
+}
+
+
+public struct CreateFile:Codable{
+    var name,parent_file_id,drive_id,type:String
+    var size:Int64?
+    var content_type,user_meta:String?
+    var labels:[String]?
+    var hidden:Bool=false
+}
+
+
+extension AliSDK{
+    public static func create(fileName:String,parentFileId:String,type:String,contentType:String?,size:Int64?,content url:URL?,progress: Progress,completionHandler: @escaping (FileInfo, Error?) -> Void){
+        let uploadUrl="https://api.aliyundrive.com/v2/file/create"
+        
+        var drive=defaultDrive()
+        
+        var createFile=CreateFile(name: fileName,parent_file_id: parentFileId, drive_id:(drive?.drive_id)!, type: type, size: size)
+        
+        let uploadInfo=_post(url: uploadUrl, parameters: createFile, responseType: UploadInfo.self, headers: nil)
+        
+        var newheaders:HTTPHeaders=getAuthHeaders()
+        
+        
+        
+        if type ==  "file" {
+        
+        
+            if let uploadDestUrl=uploadInfo?.part_info_list?[0].upload_url {
+             
+                
+                AF.up
+                
+                AF.upload(url!, to: uploadDestUrl, method: .post, headers: newheaders, interceptor: nil, fileManager: .default, requestModifier: nil)
+                    .uploadProgress { p in
+                    progress.completedUnitCount = p.completedUnitCount
+                    progress.totalUnitCount=p.totalUnitCount
+//                    progress.fileTotalCount=p.fileTotalCount
+//                    progress.fileURL=p.fileURL
+//                    progress.fileCompletedCount=p.fileCompletedCount
+                    }.response { (res) in
+                        printLog(message:  res)
+                        printLog(message: progress.isFinished)
+                        
+//                        let task=Task {
+//
+//                            [
+//                              "drive_id" : "28133360",
+//                              "part_info_list" : [ [
+//
+//                                "part_number" : 1,
+//
+//                                "upload_url" : "https://pds.data.aliyuncs.com/xxx/xxx?Expires=xxx&OSSAccessKeyId=xxx&Signature=xxx&partNumber=1&uploadId=0CC175B9C0F1B6A831C399E269772661"
+//                              ] ],
+//                              "upload_id" : "string",
+//                              "file_id" : "5d5b846942cf94fa72324c14a4bda34e81da635d"
+//                            ]
+//
+//
+//
+//
+//                            completionUplodAsync(uploadInfo: uploadInfo!) { fileInfo in
+//                            completionHandler(fileInfo,nil)
+//
+//                            }
+//                        }
+                        
+                    }
+               
+            }
+        }
+        else{
+            let fileInf=file(driveId: uploadInfo!.drive_id, fileId: uploadInfo!.file_id)
+            completionHandler(fileInf!,nil)
+        }
+    }
+    
+    public static func completionUplodAsync(uploadInfo:UploadInfo,completionHandler: @escaping (FileInfo) -> Void){
+        let url="https://api.aliyundrive.com/v2/file/complete"
+        _postAsync(url: url, parameters: uploadInfo, responseType: FileInfo.self, headers: nil) { fileInfo in
+            
+            completionHandler(fileInfo)
+                    
+        }
+        
+    }
 }

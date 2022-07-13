@@ -74,10 +74,10 @@ struct ContentView: View {
             
 //            }
             }else{
-                let domain=NSFileProviderDomain(identifier: NSFileProviderDomainIdentifier(rawValue: "Aliyunpan") ,displayName: "阿里云盘")
+                
                 AliSDK.printLog(message: "不需要重新登录")
                 AliSDK.refreshToken()
-                NSFileProviderManager.remove(domain) { error in
+                NSFileProviderManager.remove(AliSDK.DOMAIN) { error in
                     if let err=error {
                         print(err)
                     }else{
@@ -85,7 +85,7 @@ struct ContentView: View {
                     }
                 }
 
-                NSFileProviderManager.add(domain) { error in
+                NSFileProviderManager.add(AliSDK.DOMAIN) { error in
                     if let err=error {
                         print(err)
                     }else{

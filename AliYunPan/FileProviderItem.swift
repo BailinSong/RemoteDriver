@@ -34,23 +34,28 @@ class FileProviderItem: NSObject, NSFileProviderItem {
     var parentItemIdentifier: NSFileProviderItemIdentifier {
         var id:NSFileProviderItemIdentifier
         if fileInfo.parent_file_id == nil || fileInfo.parent_file_id == "" {
-            id = NSFileProviderItemIdentifier("NSFileProviderRootContainerItemIdentifier")
+            id = NSFileProviderItemIdentifier.rootContainer
         }else if fileInfo.parent_file_id == "root" {
-            id = NSFileProviderItemIdentifier("NSFileProviderRootContainerItemIdentifier")
+            id = NSFileProviderItemIdentifier.rootContainer
         }else{
-            let parentFileId=String(data:try!JSONEncoder().encode(["did":fileInfo.drive_id,"fid":fileInfo.parent_file_id]),encoding: .utf8)
-            id = NSFileProviderItemIdentifier(parentFileId!)
+//            let parentFileId=String(data:try!JSONEncoder().encode(["did":fileInfo.drive_id,"fid":fileInfo.parent_file_id]),encoding: .utf8)
+            id = NSFileProviderItemIdentifier(driveId: fileInfo.drive_id!, fileId: fileInfo.parent_file_id!)
         }
         AliSDK.printLog(message: id)
         return id
     }
     
     var capabilities: NSFileProviderItemCapabilities {
-        return [.allowsReading, .allowsWriting, .allowsRenaming, .allowsReparenting, .allowsTrashing, .allowsDeleting]
+        if contentType == .folder {
+            return [.allowsReading, .allowsWriting, .allowsRenaming, .allowsReparenting, .allowsTrashing, .allowsDeleting]
+        }else{
+            return [.allowsReading, .allowsRenaming, .allowsReparenting, .allowsTrashing, .allowsDeleting]
+        }
+        
     }
     
     var itemVersion: NSFileProviderItemVersion {
-        NSFileProviderItemVersion(contentVersion: fileInfo.crc64_hash?.data(using: .utf8)! ?? Data(), metadataVersion: try!JSONEncoder().encode(fileInfo))
+        NSFileProviderItemVersion(contentVersion: (fileInfo.content_hash?.data(using: .utf8)) ?? Data(), metadataVersion: fileInfo.crc64_hash?.data(using: .utf8) ?? Data())
     }
     
     var filename: String {
@@ -76,14 +81,31 @@ class FileProviderItem: NSObject, NSFileProviderItem {
     }
     
     var creationDate: Date?{
-        var formatter=DateFormatter()
+        let formatter=DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         return formatter.date(from: fileInfo.created_at ?? "")
     }
     
     var contentModificationDate: Date?{
-        var formatter=DateFormatter()
+        let formatter=DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         return formatter.date(from: fileInfo.updated_at ?? "")
+    }
+    
+    
+}
+
+
+extension NSFileProviderItemIdentifier{
+    var driveId:String{
+        String(rawValue.split(separator: ":")[0])
+    }
+    
+    var fileId:String{
+        String(rawValue.split(separator: ":")[1])
+    }
+    
+    init(driveId:String,fileId:String){
+        self.init(rawValue: driveId+":"+fileId)
     }
 }

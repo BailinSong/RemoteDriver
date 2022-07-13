@@ -50,44 +50,51 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
         AliSDK.printLog(message: "nextMarker:"+nextMarker)
         switch enumeratedItemIdentifier {
         case NSFileProviderItemIdentifier.rootContainer :
-            
+            AliSDK.printLog(message: "rootContainer:"+enumeratedItemIdentifier.rawValue)
             repeat{
                 if let files=AliSDK.listfile(driveId: (AliSDK.defaultDrive()?.drive_id)!, parentFileId: "root",nextMarker:nextMarker){
                     files.items?.forEach({ fileInfo in
-                        let fileId=String(data:try!JSONEncoder().encode(["did":fileInfo.drive_id,"fid":fileInfo.file_id]),encoding: .utf8)
-                        fileProviderItems.append(FileProviderItem(identifier: NSFileProviderItemIdentifier(fileId!),fileInfo: fileInfo))
+                    
+//                        let fileId=String(data:try!JSONEncoder().encode(["did":fileInfo.drive_id,"fid":fileInfo.file_id]),encoding: .utf8)
+                        fileProviderItems.append(FileProviderItem(identifier: NSFileProviderItemIdentifier(driveId: fileInfo.drive_id!,fileId: fileInfo.file_id!),fileInfo: fileInfo))
                         
                     })
+                    observer.didEnumerate(fileProviderItems)
+                    fileProviderItems.removeAll()
                     nextMarker=files.next_marker ?? ""
                 }
             }while nextMarker != ""
             
             break
         case NSFileProviderItemIdentifier.trashContainer :
+            AliSDK.printLog(message: "trashContainer:"+enumeratedItemIdentifier.rawValue)
+            break
+        case NSFileProviderItemIdentifier.workingSet :
+            AliSDK.printLog(message: "workingSet:"+enumeratedItemIdentifier.rawValue)
             break
         default:
+            AliSDK.printLog(message: "default:"+enumeratedItemIdentifier.rawValue)
             
-            if enumeratedItemIdentifier.rawValue.starts(with: "{"){
                 repeat{
                     AliSDK.printLog(message: enumeratedItemIdentifier.rawValue)
-                    let itemId=try!JSONDecoder().decode([String:String].self, from: enumeratedItemIdentifier.rawValue.data(using: .utf8)!)
-                    if let files=AliSDK.listfile(driveId: itemId["did"]!, parentFileId: itemId["fid"]!,nextMarker:nextMarker){
+                    
+//                    let itemId=try!JSONDecoder().decode([String:String].self, from: enumeratedItemIdentifier.rawValue.data(using: .utf8)!)
+                    if let files=AliSDK.listfile(driveId: enumeratedItemIdentifier.driveId, parentFileId: enumeratedItemIdentifier.fileId,nextMarker:nextMarker){
                         files.items?.forEach({ fileInfo in
-                            let fileId=String(data:try!JSONEncoder().encode(["did":fileInfo.drive_id,"fid":fileInfo.file_id]),encoding: .utf8)
-                        
-                            fileProviderItems.append(FileProviderItem(identifier: NSFileProviderItemIdentifier(fileId!),fileInfo: fileInfo))
-                            AliSDK.printLog(message: (fileInfo.name ?? "")+"\t"+fileId!)
+//                            let fileId=String(data:try!JSONEncoder().encode(["did":fileInfo.drive_id,"fid":fileInfo.file_id]),encoding: .utf8)
+                            
+                            fileProviderItems.append(FileProviderItem(identifier: NSFileProviderItemIdentifier(driveId: fileInfo.drive_id!,fileId: fileInfo.file_id!),fileInfo: fileInfo))
                         })
                         nextMarker=files.next_marker ?? ""
                     }
+                    observer.didEnumerate(fileProviderItems)
+                    fileProviderItems.removeAll()
                 }while nextMarker != ""
-            }else{
-                AliSDK.printLog(message: enumeratedItemIdentifier.rawValue)
-            }
+           
            
             
         }
-        observer.didEnumerate(fileProviderItems)
+        
         
         AliSDK.printLog(message: fileProviderItems)
 //        AliSDK.refreshToken()
