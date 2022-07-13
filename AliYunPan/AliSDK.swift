@@ -941,8 +941,6 @@ extension AliSDK{
             if let uploadDestUrl=uploadInfo?.part_info_list?[0].upload_url {
              
                 
-                AF.up
-                
                 AF.upload(url!, to: uploadDestUrl, method: .post, headers: newheaders, interceptor: nil, fileManager: .default, requestModifier: nil)
                     .uploadProgress { p in
                     progress.completedUnitCount = p.completedUnitCount
