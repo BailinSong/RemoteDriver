@@ -35,7 +35,7 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
             var fileInfo=FileInfo()
             fileInfo.name="废纸篓"
             fileInfo.drive_id=drive?.drive_id
-            fileInfo.file_id="recyclebin"
+            fileInfo.file_id="trash"
             fileInfo.parent_file_id=""
             fileInfo.type="folder"
             fileInfo.status="Available"
@@ -46,7 +46,14 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
             AliSDK.printLog(message: identifier.rawValue)
 //            let itemId=try!JSONDecoder().decode([String:String].self, from: identifier.rawValue.data(using: .utf8)!)
             let fileInfo=AliSDK.file(driveId: identifier.driveId, fileId: identifier.fileId)
-            completionHandler(FileProviderItem(identifier: identifier,fileInfo: fileInfo!), nil)
+            
+            if fileInfo?.file_id==nil{
+                completionHandler(nil, NSError(domain: NSCocoaErrorDomain, code: NSFileNoSuchFileError, userInfo:[:]))
+                
+            }else {
+                
+                completionHandler(FileProviderItem(identifier: identifier,fileInfo: fileInfo!), nil)
+            }
         }
         
         
@@ -95,19 +102,73 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
         return progress
     }
     
-    func modifyItem(_ item: NSFileProviderItem, baseVersion version: NSFileProviderItemVersion, changedFields: NSFileProviderItemFields, contents newContents: URL?, options: NSFileProviderModifyItemOptions = [], request: NSFileProviderRequest, completionHandler: @escaping (NSFileProviderItem?, NSFileProviderItemFields, Bool, Error?) -> Void) -> Progress {
+    func modifyItem(_ item: NSFileProviderItem, baseVersion version: NSFileProviderItemVersion, changedFields: NSFileProviderItemFields, contents newContents: URL?, options: NSFileProviderModifyItemOptions =
+    [], request: NSFileProviderRequest, completionHandler: @escaping (NSFileProviderItem?, NSFileProviderItemFields, Bool, Error?) -> Void) -> Progress {
         // TODO: an item was modified on disk, process the item's modification
+        AliSDK.printLog(message: item)
+        AliSDK.printLog(message: changedFields)
+        AliSDK.printLog(message: options)
+        AliSDK.printLog(message: request)
+        var  progress=Progress()
+        if(changedFields.contains(.contents)){
+            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+        }
+        if(changedFields.contains(.parentItemIdentifier)){
+            if item.parentItemIdentifier == .trashContainer {
+                AliSDK.trash(driveId: item.itemIdentifier.driveId, fileId: item.itemIdentifier.fileId, progress: progress) { error in
+                    completionHandler(item, [.parentItemIdentifier], true, nil)
+                }
+                return progress
+            }else{
+                if (item as! FileProviderItem).isTrashe {
+                    AliSDK.restore(driveId: item.itemIdentifier.driveId, fileId: item.itemIdentifier.fileId, progress: progress) { error in
+                        completionHandler(item, [.parentItemIdentifier], true, nil)
+                    }
+                    return progress
+                }
+            }
+            completionHandler(item, [.parentItemIdentifier], true, nil)
+        }
+        if(changedFields.contains(.filename)){
+            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+        }
+        if(changedFields.contains(.contentModificationDate)){
+            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+        }
+        if(changedFields.contains(.creationDate)){
+            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+        }
+        if(changedFields.contains(.extendedAttributes)){
+            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+        }
+        if(changedFields.contains(.favoriteRank)){
+            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+        }
+        if(changedFields.contains(.fileSystemFlags)){
+            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+        }
+        if(changedFields.contains(.lastUsedDate)){
+            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+        }
+        if(changedFields.contains(.tagData)){
+            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+        }
+        if(changedFields.contains(.typeAndCreator)){
+            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+        }
+         
         
         
-        
-        completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+//        completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
         return Progress()
     }
     
     func deleteItem(identifier: NSFileProviderItemIdentifier, baseVersion version: NSFileProviderItemVersion, options: NSFileProviderDeleteItemOptions = [], request: NSFileProviderRequest, completionHandler: @escaping (Error?) -> Void) -> Progress {
         // TODO: an item was deleted on disk, process the item's deletion
+        let progress=Progress(totalUnitCount: 1)
+        AliSDK.deleteFile(driveId: identifier.driveId, fileId: identifier.fileId, progress: progress,completionHandler: completionHandler)
         
-        completionHandler(NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+//        completionHandler(NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
         return Progress()
     }
     

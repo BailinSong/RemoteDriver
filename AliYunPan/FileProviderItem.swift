@@ -24,11 +24,15 @@ class FileProviderItem: NSObject, NSFileProviderItem {
     
     init(identifier: NSFileProviderItemIdentifier,fileInfo:FileInfo) {
         self.identifier = identifier
-        self.fileInfo=fileInfo;
+        self.fileInfo=fileInfo
     }
     
     var itemIdentifier: NSFileProviderItemIdentifier {
         return identifier
+    }
+    
+    var isTrashe:Bool{
+        return fileInfo.trashed ?? false
     }
     
     var parentItemIdentifier: NSFileProviderItemIdentifier {
@@ -37,7 +41,11 @@ class FileProviderItem: NSObject, NSFileProviderItem {
             id = NSFileProviderItemIdentifier.rootContainer
         }else if fileInfo.parent_file_id == "root" {
             id = NSFileProviderItemIdentifier.rootContainer
-        }else{
+        }
+        else if fileInfo.trashed ?? false {
+            id = NSFileProviderItemIdentifier.trashContainer
+        }
+        else {
 //            let parentFileId=String(data:try!JSONEncoder().encode(["did":fileInfo.drive_id,"fid":fileInfo.parent_file_id]),encoding: .utf8)
             id = NSFileProviderItemIdentifier(driveId: fileInfo.drive_id!, fileId: fileInfo.parent_file_id!)
         }
@@ -104,8 +112,11 @@ extension NSFileProviderItemIdentifier{
     var fileId:String{
         String(rawValue.split(separator: ":")[1])
     }
+  
     
     init(driveId:String,fileId:String){
         self.init(rawValue: driveId+":"+fileId)
     }
 }
+
+

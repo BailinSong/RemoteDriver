@@ -134,10 +134,10 @@ public class AliSDK{
     
   
     
-    public static func _get<D: Decodable,E:Encodable>(url:String,parameters:E?,tokenType:String?,accessToken:String?,responseType:D.Type,headers:HTTPHeaders?)->D?{
+    public static func _get<D: Decodable,E:Encodable>(url:String,parameters:E?,tokenType:String?,accessToken:String?,responseType:D.Type,headers:HTTPHeaders? = getAuthHeaders())->D?{
         let decoder=JSONDecoder()
         
-        var newheaders=getAuthHeaders()
+        var newheaders=HTTPHeaders()
         
         headers?.forEach{
             header in
@@ -168,16 +168,25 @@ public class AliSDK{
     
     
     public static func getAuthHeaders()->HTTPHeaders{
+        
+        
+        
+        
         var newheaders:HTTPHeaders=HTTPHeaders()
          
          if(userData.value(forKey: "tokenType") != nil && userData.value(forKey: "accessToken") != nil){
+             
+             if userData.integer(forKey: "expires") != 0 && userData.integer(forKey: "expires") < Int(Date().timeIntervalSince1970) {
+                 refreshToken()
+             }
+             
              newheaders.add(name: "authorization", value: (userData.value(forKey: "tokenType") as! String) + " " + (userData.value(forKey: "accessToken") as! String))
          }
         
         return newheaders
     }
     
-    public static func _post<D: Decodable,E:Encodable>(url:String,parameters:E?,responseType:D.Type,headers:HTTPHeaders?)->D?{
+    public static func _post<D: Decodable,E:Encodable>(url:String,parameters:E?,responseType:D.Type,headers:HTTPHeaders? = getAuthHeaders())->D?{
         
         
         var  returnResult:D?
@@ -192,10 +201,18 @@ public class AliSDK{
 
     }
     
-    public static func _postAsync<D: Decodable,E:Encodable>(url:String,parameters:E?,responseType:D.Type,headers:HTTPHeaders?,completionHandler: @escaping (D) -> Void){
+    
+    
+    public static func _postAsync<D: Decodable,E:Encodable>(url:String,parameters:E?,responseType:D.Type,headers:HTTPHeaders? = getAuthHeaders(),completionHandler: @escaping (D) -> Void){
+        
+        
+        
+        
+        
+        
         let decoder=JSONDecoder()
         
-        var newheaders=getAuthHeaders()
+        var newheaders=HTTPHeaders()
 
         headers?.forEach{
             header in
@@ -204,24 +221,30 @@ public class AliSDK{
 
         newheaders.add(name: "content-type", value: "application/json;charset-utf-8")
         
+        printLog(message: "request:"+url)
         printLog(message: newheaders)
+        
         
         let response=AF.request(url, method: HTTPMethod.post, parameters: parameters, encoder: JSONParameterEncoder(), headers: newheaders)
        
         response.responseString{ afData in
+            
+            
+            printLog(message: "response:"+url)
+            
             let str=try!afData.result.get()
             
             printLog(message: "json:"+str)
             
-            do {
-
-                let result = try decoder.decode(responseType, from: (str.data(using: .utf8))!)
-                
+            if str  !=  "" {
+                let result = try! decoder.decode(responseType, from: (str.data(using: .utf8))!)
+                    
                 completionHandler(result)
-
-            } catch{
-                printLog(message: str)
             }
+            
+            
+
+            
         }
     }
 }
@@ -454,7 +477,7 @@ public static func refreshToken()->AccountToken?{
     let response=_post(url: "https://auth.aliyundrive.com/v2/account/token", parameters: ["grant_type": "refresh_token", "app_id": userData.value(forKey: "appId") as! String, "refresh_token": userData.value(forKey: "refreshToken") as! String], responseType: AccountToken.self, headers: nil)
     printLog(message: response)
     if let accessToken=response?.access_token {
-        let nowSecond=Int(Date().timeIntervalSince1970)+(response?.expires_in ?? 1)
+        let nowSecond=Int(Date().timeIntervalSince1970)+((response?.expires_in ?? 2)/2)
         userData.set(nowSecond, forKey: "expires")
         userData.set(accessToken, forKey: "accessToken")
     }
@@ -501,14 +524,14 @@ public struct Drive:Codable{
 @available(macOS 12.0, *)
 extension AliSDK{
     public static func defaultDrive() -> Drive? {
-        let response=_post(url: "https://api.aliyundrive.com/v2/drive/get_default_drive",parameters: ["default":""], responseType: Drive.self, headers: nil)
+        let response=_post(url: "https://api.aliyundrive.com/v2/drive/get_default_drive",parameters: ["default":""], responseType: Drive.self)
         printLog(message: response)
         return response
         
     }
     
     public static func drive(driveId:String) -> Drive? {
-        let response=_post(url: "https://api.aliyundrive.com/v2/drive/get", parameters: [ "drive_id": driveId ], responseType: Drive.self, headers: nil)
+        let response=_post(url: "https://api.aliyundrive.com/v2/drive/get", parameters: [ "drive_id": driveId ], responseType: Drive.self)
         printLog(message: response)
         return response
         
@@ -531,7 +554,7 @@ public struct FolderInfo:Codable{
 @available(macOS 12.0, *)
 extension AliSDK{
     public static func folderInfo(driveId:String,fileId:String)->FolderInfo?{
-        let response=_post(url: "https://api.aliyundrive.com/adrive/v1/file/get_folder_size_info", parameters: [ "drive_id": driveId, "file_id": fileId  ], responseType: FolderInfo.self, headers: nil)
+        let response=_post(url: "https://api.aliyundrive.com/adrive/v1/file/get_folder_size_info", parameters: [ "drive_id": driveId, "file_id": fileId  ], responseType: FolderInfo.self)
         printLog(message: response)
         return response
         
@@ -655,7 +678,7 @@ extension AliSDK{
 public struct FileInfo:Codable{
     var drive_id,domain_id,file_id,name,type,content_type,created_at,updated_at,file_extension,mime_type,mime_extension,status,user_meta,upload_id,parent_file_id,crc64_hash,content_hash,content_hash_name,download_url,url,thumbnail,category,encrypt_mode,last_modifier_type,last_modifier_id,last_modifier_name,revision_id:String?
 
-      var hidden,starred，trashed:Bool?
+      var hidden,starred,trashed:Bool?
 
 
       var size,punish_flag:Int64?
@@ -703,14 +726,14 @@ public struct ListFileRequest:Codable{
 @available(macOS 12.0, *)
 extension AliSDK{
     public static func file(driveId:String,fileId:String)->FileInfo?{
-        let response=_post(url: "https://api.aliyundrive.com/v2/file/get", parameters: [ "drive_id": driveId, "file_id": fileId  ], responseType: FileInfo.self, headers: nil)
+        let response=_post(url: "https://api.aliyundrive.com/v2/file/get", parameters: [ "drive_id": driveId, "file_id": fileId  ], responseType: FileInfo.self)
         printLog(message: response)
         return response
         
     }
     
     public static func fileAsync(driveId:String,fileId:String,completionHandler: @escaping (FileInfo) -> Void){
-        _postAsync(url: "https://api.aliyundrive.com/v2/file/get", parameters: [ "drive_id": driveId, "file_id": fileId  ], responseType: FileInfo.self, headers: nil, completionHandler: completionHandler)
+        _postAsync(url: "https://api.aliyundrive.com/v2/file/get", parameters: [ "drive_id": driveId, "file_id": fileId  ], responseType: FileInfo.self, completionHandler: completionHandler)
         
         
     }
@@ -720,7 +743,7 @@ extension AliSDK{
         var request=ListFileRequest(drive_id: driveId, parent_file_id: parentFileId,marker:nextMarker)
         request.limit = 10
         
-        let response=_post(url: "https://api.aliyundrive.com/v2/file/list", parameters: request, responseType: ListFiles.self, headers: nil)
+        let response=_post(url: "https://api.aliyundrive.com/v2/file/list", parameters: request, responseType: ListFiles.self)
         printLog(message: response)
         return response
         
@@ -766,7 +789,7 @@ extension AliSDK{
                                 progress: Progress,completionHandler: @escaping (URL?, String?,String?, Error?) -> Void) throws -> URL? {
       
            
-           if let response=_post(url: "https://api.aliyundrive.com/v2/file/get_download_url", parameters: ["drive_id":driveId,"expires_sec":"0","file_id":fileId], responseType: DownloadInfo.self, headers: nil){
+           if let response=_post(url: "https://api.aliyundrive.com/v2/file/get_download_url", parameters: ["drive_id":driveId,"expires_sec":"0","file_id":fileId], responseType: DownloadInfo.self){
                progress.totalUnitCount=response.size
 //               let manager=NSFileProviderManager(for: AliSDK.DOMAIN)
                
@@ -878,6 +901,11 @@ public struct UploadInfo:Codable{
     
 }
 
+public struct UploadUrl:Codable{
+    var create_at,domain_id,drive_id,file_id,upload_id:String
+    var part_info_list:[PartInfoList]
+}
+
 public struct PartInfoList:Codable{
     var upload_url:String
     var part_number,part_size:Int64?
@@ -895,76 +923,250 @@ public struct CreateFile:Codable{
 
 
 extension AliSDK{
-    public static func create(fileName:String,parentFileId:String,type:String,contentType:String?,size:Int64?,content url:URL?,progress: Progress,completionHandler: @escaping (FileInfo, Error?) -> Void){
+    public static func create(fileName:String,parentFileId:String,type:String,contentType:String?,size:Int64?,content url:URL?,progress: Progress,completionHandler: @escaping (FileInfo, Error?)->Void ) -> Progress{
         let uploadUrl="https://api.aliyundrive.com/v2/file/create"
         
         var drive=defaultDrive()
         
         var createFile=CreateFile(name: fileName,parent_file_id: parentFileId, drive_id:(drive?.drive_id)!, type: type, size: size)
         
-        let uploadInfo=_post(url: uploadUrl, parameters: createFile, responseType: UploadInfo.self, headers: nil)
+        let uploadInfo=_post(url: uploadUrl, parameters: createFile, responseType: UploadInfo.self)
         
-        var newheaders:HTTPHeaders=getAuthHeaders()
+//        var newheaders:HTTPHeaders=getAuthHeaders()
         
         
         
         if type ==  "file" {
         
-        
-            if let uploadDestUrl=uploadInfo?.part_info_list?[0].upload_url {
-             
+            
+            getUploadUrl(uploadInfo: uploadInfo!, partIndex: 0) { uploadUrl in
+                let uploadDestUrl=uploadUrl.part_info_list[0].upload_url
                 
-                AF.upload(url!, to: uploadDestUrl, method: .post, headers: newheaders, interceptor: nil, fileManager: .default, requestModifier: nil)
-                    .uploadProgress { p in
-                    progress.completedUnitCount = p.completedUnitCount
-                    progress.totalUnitCount=p.totalUnitCount
-//                    progress.fileTotalCount=p.fileTotalCount
-//                    progress.fileURL=p.fileURL
-//                    progress.fileCompletedCount=p.fileCompletedCount
-                    }.response { (res) in
-                        printLog(message:  res)
-                        printLog(message: progress.isFinished)
+                if uploadDestUrl != nil && uploadDestUrl != "" {
+
+//                    let parameters = "<file contents here>"
+                    let postData = try! InputStream(url: url!)
+                    progress.totalUnitCount=1
+
+                    var request = URLRequest(url: URL(string:uploadDestUrl)!,timeoutInterval: Double.infinity)
+                    request.headers = getAuthHeaders()
+
+                    request.httpMethod = "PUT"
+                    request.httpBodyStream = postData
                         
-//                        let task=Task {
+//                    let task = URLSession.shared.dataTask(with: request ) { data, response, error in
+//                      guard let data = data else {
+//                          printLog(message: String(describing: error))
 //
-//                            [
-//                              "drive_id" : "28133360",
-//                              "part_info_list" : [ [
-//
-//                                "part_number" : 1,
-//
-//                                "upload_url" : "https://pds.data.aliyuncs.com/xxx/xxx?Expires=xxx&OSSAccessKeyId=xxx&Signature=xxx&partNumber=1&uploadId=0CC175B9C0F1B6A831C399E269772661"
-//                              ] ],
-//                              "upload_id" : "string",
-//                              "file_id" : "5d5b846942cf94fa72324c14a4bda34e81da635d"
-//                            ]
-//
-//
-//
-//
-//                            completionUplodAsync(uploadInfo: uploadInfo!) { fileInfo in
+//                        return
+//                      }
+//                      printLog(message: String(data: data, encoding: .utf8)!)
+//                        completionUploadAsync(uploadInfo: uploadInfo!) { fileInfo in
 //                            completionHandler(fileInfo,nil)
 //
-//                            }
 //                        }
-                        
+//                    }
+                    
+                    let task = URLSession.shared.dataTask(with: request ) { data, response, error in
+                      guard let data = data else {
+                          printLog(message: String(describing: error))
+
+                        return
+                      }
+                      printLog(message: String(data: data, encoding: .utf8)!)
+                        completionUploadAsync(uploadInfo: uploadInfo!) { fileInfo in
+                            completionHandler(fileInfo,nil)
+
+                        }
                     }
-               
+                    
+                    task.resume()
+//                    task.addObserver(task, forKeyPath: \.countOfBytesSent, context: UnsafeMutableRawPointer?)(\.countOfBytesSent) { task, _ in
+//                        progress.totalUnitCount=task.countOfBytesExpectedToSend
+//                        progress.completedUnitCount=task.countOfBytesSent
+//
+//                        printLog(message: "sent bytes: "+String(task.countOfBytesSent))
+//                    }
+                    progress.addChild(task.progress, withPendingUnitCount: 1)
+                    return
+
+
+                
+                    
+                    
+                    /**
+                     
+                     
+                var headers=getAuthHeaders()
+
+                
+                               
+                AF.upload(url!, to: uploadDestUrl, method: .put,headers: headers, interceptor: nil, requestModifier: {  request in
+                    request.headers.remove(name: "content-type")
+                    printLog(message:  request.headers)
+                })
+                        .uploadProgress { p in
+                        progress.completedUnitCount = p.completedUnitCount
+                        progress.totalUnitCount=p.totalUnitCount
+                        }.responseString { (res) in
+                            printLog(message: uploadDestUrl)
+                            printLog(message:  res.request?.headers)
+                            printLog(message:  res.request?.httpBody)
+                            printLog(message:  res.response?.headers)
+                            printLog(message:  try! res.result.get())
+                            printLog(message: String(progress.totalUnitCount)+" "+String(progress.isFinished))
+
+
+                            completionUploadAsync(uploadInfo: uploadInfo!) { fileInfo in
+                            completionHandler(fileInfo,nil)
+
+                            }
+
+
+                        }
+                     */
+                     
+                }
+                
             }
-        }
-        else{
+            
+        } else {
             let fileInf=file(driveId: uploadInfo!.drive_id, fileId: uploadInfo!.file_id)
             completionHandler(fileInf!,nil)
+            
         }
+        return progress
     }
     
-    public static func completionUplodAsync(uploadInfo:UploadInfo,completionHandler: @escaping (FileInfo) -> Void){
+    public static func getUploadUrl(uploadInfo:UploadInfo,partIndex:Int,completionHandler:@escaping (UploadUrl)->Void){
+        let url="https://api.aliyundrive.com/v2/file/get_upload_url"
+        
+        _postAsync(url: url, parameters: uploadInfo, responseType: UploadUrl.self) { uploadUrl in
+            
+            completionHandler(uploadUrl)
+                    
+        }
+        
+        
+    }
+    
+    public static func completionUploadAsync(uploadInfo:UploadInfo,completionHandler: @escaping (FileInfo) -> Void){
         let url="https://api.aliyundrive.com/v2/file/complete"
-        _postAsync(url: url, parameters: uploadInfo, responseType: FileInfo.self, headers: nil) { fileInfo in
+        
+        /**
+         [
+             "upload_id": uploadInfo.upload_id,
+             "file_id": uploadInfo.file_id,
+             "drive_id": uploadInfo.drive_id,
+             "domain_id":uploadInfo.domain_id
+         ]
+         */
+        
+        _postAsync(url: url, parameters: uploadInfo, responseType: FileInfo.self) { fileInfo in
             
             completionHandler(fileInfo)
                     
         }
         
+    }
+    
+    
+    public struct AsyncTaskInfo:Codable{
+        let domain_id,drive_id,file_id,async_task_id:String?
+    }
+    
+    public static func deleteFile(driveId:String,fileId:String,
+                                  progress: Progress,completionHandler: @escaping (Error?) -> Void){
+        let url="https://api.aliyundrive.com/v2/file/delete"
+        
+        _postAsync(url: url, parameters: ["drive_id":driveId,"file_id":fileId], responseType: AsyncTaskInfo.self) { info in
+            
+            
+            progress.completedUnitCount+=1
+            guard info.file_id != nil && info.file_id != ""  else {
+//                completionHandler(NSError(domain: NSCocoaErrorDomain, code: NSFileNoSuchFileError, userInfo:[:]))
+                completionHandler(nil)
+                
+                return
+            }
+            
+            
+            completionHandler(nil)
+            
+            
+                   
+        }
+    }
+    
+    
+    public struct UpdateInfo:Codable{
+        var drive_id,file_id,name,description,check_name_mode,local_modified_at:String?
+        var labels:[String]?
+        var hidden,starred:Bool?
+    }
+    
+    
+    public static func update(driveId:String,fileId:String,info:UpdateInfo,
+                                  progress: Progress,completionHandler: @escaping (Error?) -> Void){
+        let url="https://api.aliyundrive.com/v2/file/update"
+        
+    
+        var updateInfo=UpdateInfo()
+        
+        updateInfo.drive_id=driveId
+        updateInfo.file_id=fileId
+        
+        updateInfo.name=info.name
+        updateInfo.description=info.description
+        updateInfo.check_name_mode=info.check_name_mode
+        updateInfo.local_modified_at=info.local_modified_at
+        updateInfo.labels=info.labels
+        updateInfo.hidden=info.hidden
+        
+        
+        _postAsync(url: url, parameters: info, responseType: FileInfo.self) { info in
+            
+            
+            progress.completedUnitCount+=1
+            guard info.file_id != nil && info.file_id != ""  else {
+                completionHandler(NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+                
+                return
+            }
+            
+            
+            completionHandler(nil)
+            
+        }
+    }
+    
+    public static func trash(driveId:String,fileId:String,progress: Progress,completionHandler: @escaping (Error?) -> Void){
+        let url="https://api.aliyundrive.com/v2/recyclebin/trash"
+        _postAsync(url: url, parameters: ["drive_id":driveId,"file_id":fileId], responseType: AsyncTaskInfo.self) { info in
+            
+            
+        
+            progress.completedUnitCount+=1
+            
+            
+            completionHandler(nil)
+            
+            
+                   
+        }
+    }
+    
+    public static func restore(driveId:String,fileId:String,progress: Progress,completionHandler: @escaping (Error?) -> Void){
+        let url="https://api.aliyundrive.com/v2/recyclebin/restore"
+        _postAsync(url: url, parameters: ["drive_id":driveId,"file_id":fileId], responseType: AsyncTaskInfo.self) { info in
+            
+            progress.completedUnitCount+=1
+            completionHandler(nil)
+                   
+        }
+    }
+    
+    public static func listTrashFiles(marker:String,progress: Progress,completionHandler: @escaping (Error?) -> Void){
+        let url="https://api.aliyundrive.com/v2/recyclebin/list"
     }
 }
