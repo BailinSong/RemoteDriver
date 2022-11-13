@@ -40,8 +40,6 @@ struct ContentView: View {
                                 
                                 if AliSDK.getLoginResult(qrCodeResult: loginQrContent) != nil{
                                     logined=true
-                                    
-                                    
                                 }
 
                             }

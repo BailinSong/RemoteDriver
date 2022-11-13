@@ -109,6 +109,10 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
     }
     
     func enumerateChanges(for observer: NSFileProviderChangeObserver, from anchor: NSFileProviderSyncAnchor) {
+        
+        
+        
+        AliSDK.printLog(message: "enumerateChanges")
         /* TODO:
          - query the server for updates since the passed-in sync anchor
          
@@ -122,6 +126,7 @@ class FileProviderEnumerator: NSObject, NSFileProviderEnumerator {
     }
 
     func currentSyncAnchor(completionHandler: @escaping (NSFileProviderSyncAnchor?) -> Void) {
+        AliSDK.printLog(message: "currentSyncAnchor")
         completionHandler(anchor)
     }
 }

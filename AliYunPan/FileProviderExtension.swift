@@ -9,9 +9,17 @@ import FileProvider
 
 
 class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
+    
+    var domain:NSFileProviderDomain
+    
+    
+    
     required init(domain: NSFileProviderDomain) {
         // TODO: The containing application must create a domain using `NSFileProviderManager.add(_:, completionHandler:)`. The system will then launch the application extension process, call `FileProviderExtension.init(domain:)` to instantiate the extension for that domain, and call methods on the instance.
+        self.domain=domain
         super.init()
+       
+        
     }
     
     func invalidate() {
@@ -20,7 +28,7 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     
     func item(for identifier: NSFileProviderItemIdentifier, request: NSFileProviderRequest, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) -> Progress {
         // resolve the given identifier to a record in the model
-        
+        AliSDK.printLog(message: "item")
         // TODO: implement the actual lookup
         
         if NSFileProviderItemIdentifier.rootContainer == identifier {
@@ -39,9 +47,9 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
             fileInfo.parent_file_id=""
             fileInfo.type="folder"
             fileInfo.status="Available"
-            completionHandler(FileProviderItem(identifier: identifier,fileInfo: fileInfo), nil)
+            completionHandler(FileProviderItem(identifier: .trashContainer,fileInfo: fileInfo), nil)
         }else if NSFileProviderItemIdentifier.workingSet == identifier{
-            
+            AliSDK.printLog(message: identifier.rawValue)
         } else{
             AliSDK.printLog(message: identifier.rawValue)
 //            let itemId=try!JSONDecoder().decode([String:String].self, from: identifier.rawValue.data(using: .utf8)!)
@@ -64,7 +72,7 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     
     func fetchContents(for itemIdentifier: NSFileProviderItemIdentifier, version requestedVersion: NSFileProviderItemVersion?, request: NSFileProviderRequest, completionHandler: @escaping (URL?, NSFileProviderItem?, Error?) -> Void) -> Progress {
         // TODO: implement fetching of the contents for the itemIdentifier at the specified version
-        
+        AliSDK.printLog(message: "fetchContents")
         let progress=Progress()
         
         let fileInfo=AliSDK.file(driveId: itemIdentifier.driveId, fileId: itemIdentifier.fileId)
@@ -105,62 +113,164 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     func modifyItem(_ item: NSFileProviderItem, baseVersion version: NSFileProviderItemVersion, changedFields: NSFileProviderItemFields, contents newContents: URL?, options: NSFileProviderModifyItemOptions =
     [], request: NSFileProviderRequest, completionHandler: @escaping (NSFileProviderItem?, NSFileProviderItemFields, Bool, Error?) -> Void) -> Progress {
         // TODO: an item was modified on disk, process the item's modification
+        AliSDK.printLog(message: "========================= modify item=============================")
         AliSDK.printLog(message: item)
         AliSDK.printLog(message: changedFields)
         AliSDK.printLog(message: options)
         AliSDK.printLog(message: request)
-        var  progress=Progress()
+        var leftFields=changedFields
+        
+//       var fields = NSFileProviderItemFields()
+        
+        let  progress=Progress(totalUnitCount: 1)
         if(changedFields.contains(.contents)){
-            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+            
+            AliSDK.printLog(message: "contents")
+            leftFields.remove(.contents)
+            if item.contentType == .folder{
+                leftFields.remove(.contents)
+               
+                completionHandler(item,.contents,true,nil)
+            }else{
+              
+                completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+            }
+            
+            
         }
         if(changedFields.contains(.parentItemIdentifier)){
+            AliSDK.printLog(message: "parentItemIdentifier")
+            
+            leftFields.remove(.parentItemIdentifier)
+            
+            var remoteFile=AliSDK.file(driveId: item.itemIdentifier.driveId, fileId: item.itemIdentifier.fileId)
+            
             if item.parentItemIdentifier == .trashContainer {
-                AliSDK.trash(driveId: item.itemIdentifier.driveId, fileId: item.itemIdentifier.fileId, progress: progress) { error in
-                    completionHandler(item, [.parentItemIdentifier], true, nil)
-                }
+                
+                    AliSDK.trash(driveId: item.itemIdentifier.driveId, fileId: item.itemIdentifier.fileId, progress: progress) { error in
+                        
+                        remoteFile?.trashed=true
+                        completionHandler(FileProviderItem(identifier: item.itemIdentifier, fileInfo: remoteFile!), leftFields, false, nil)
+                    }
+                
+                
                 return progress
             }else{
-                if (item as! FileProviderItem).isTrashe {
+                
+                if remoteFile?.trashed ?? false {
                     AliSDK.restore(driveId: item.itemIdentifier.driveId, fileId: item.itemIdentifier.fileId, progress: progress) { error in
-                        completionHandler(item, [.parentItemIdentifier], true, nil)
+                        completionHandler(FileProviderItem(identifier: item.itemIdentifier, fileInfo: remoteFile!), leftFields, false, nil)
                     }
-                    return progress
+                    return progress;
+                }else if item.parentItemIdentifier == .rootContainer {
+                    AliSDK.move(driveId: item.itemIdentifier.driveId, fileId: item.itemIdentifier.fileId, parentFileId: "root", progress: progress) { error in
+                        completionHandler(FileProviderItem(identifier: item.itemIdentifier, fileInfo: remoteFile!), leftFields, false, nil)
+                    }
+                }else {
+                
+                    AliSDK.move(driveId: item.itemIdentifier.driveId, fileId: item.itemIdentifier.fileId, parentFileId: item.parentItemIdentifier.fileId, progress: progress) { error in
+                        
+                        completionHandler(FileProviderItem(identifier: item.itemIdentifier, fileInfo: remoteFile!), leftFields, false, nil)
+                    }
                 }
+                    return progress
             }
-            completionHandler(item, [.parentItemIdentifier], true, nil)
+//            }
+//            completionHandler(item, [.parentItemIdentifier], true, nil)
         }
+        
+        
+        var updateInfo = UpdateInfo()
+        var needUpdate=false
         if(changedFields.contains(.filename)){
-            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+           
+            AliSDK.printLog(message: "filename")
+            leftFields.remove(.filename)
+            updateInfo.name=item.filename
+            needUpdate=true
+//            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
         }
         if(changedFields.contains(.contentModificationDate)){
-            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+            
+            AliSDK.printLog(message: "contentModificationDate")
+            leftFields.remove(.contentModificationDate)
+            
+            NSFileProviderManager(for: domain)?.signalEnumerator(for: item.itemIdentifier, completionHandler: { error in
+                AliSDK.printLog(message: error)
+            })
+            
+//            let df = DateFormatter()
+//            df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//            updateInfo.local_modified_at=df.string(from: item.contentModificationDate!!)
+//            completionHandler(item, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
         }
         if(changedFields.contains(.creationDate)){
-            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+            AliSDK.printLog(message: "creationDate")
+            leftFields.remove(.creationDate)
+//            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
         }
         if(changedFields.contains(.extendedAttributes)){
-            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+            AliSDK.printLog(message: "extendedAttributes")
+            leftFields.remove(.extendedAttributes)
+//            updateInfo.labels=item.extendedAttributes
+//            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
         }
         if(changedFields.contains(.favoriteRank)){
-            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+            AliSDK.printLog(message: "favoriteRank")
+            leftFields.remove(.favoriteRank)
+//            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
         }
         if(changedFields.contains(.fileSystemFlags)){
-            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+            AliSDK.printLog(message: "fileSystemFlags")
+            leftFields.remove(.fileSystemFlags)
+//            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
         }
         if(changedFields.contains(.lastUsedDate)){
-            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+            AliSDK.printLog(message: "lastUsedDate")
+            leftFields.remove(.lastUsedDate)
+            
+//            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
         }
         if(changedFields.contains(.tagData)){
-            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+            AliSDK.printLog(message: "tagData")
+            leftFields.remove(.tagData)
+//            updateInfo.labels = item.tagData
+//            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
         }
         if(changedFields.contains(.typeAndCreator)){
-            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
+            AliSDK.printLog(message: "typeAndCreator")
+            leftFields.remove(.typeAndCreator)
+//            completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
         }
-         
         
+        if needUpdate {
+        
+            AliSDK.update(driveId: item.itemIdentifier.driveId, fileId: item.itemIdentifier.fileId, info: updateInfo, progress: progress) { err in
+                
+                if err == nil {
+                    AliSDK.fileAsync(driveId: item.itemIdentifier.driveId, fileId: item.itemIdentifier.fileId) { fileInfo in
+                        progress.completedUnitCount=1
+                        completionHandler(FileProviderItem(identifier: item.itemIdentifier, fileInfo: fileInfo), leftFields, true, nil)
+                    }
+                    
+                }else{
+                    completionHandler(nil, [], true, err)
+                    AliSDK.printLog(message: err)
+                }
+                
+            }
+        }else{
+            AliSDK.fileAsync(driveId: item.itemIdentifier.driveId, fileId: item.itemIdentifier.fileId) { fileInfo in
+                progress.completedUnitCount=1
+                completionHandler(FileProviderItem(identifier: item.itemIdentifier, fileInfo: fileInfo), leftFields, true, nil)
+                
+            }
+        }
+        
+        AliSDK.printLog(message: "======================================================")
         
 //        completionHandler(nil, [], false, NSError(domain: NSCocoaErrorDomain, code: NSFeatureUnsupportedError, userInfo:[:]))
-        return Progress()
+        return progress
     }
     
     func deleteItem(identifier: NSFileProviderItemIdentifier, baseVersion version: NSFileProviderItemVersion, options: NSFileProviderDeleteItemOptions = [], request: NSFileProviderRequest, completionHandler: @escaping (Error?) -> Void) -> Progress {
@@ -175,4 +285,5 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     func enumerator(for containerItemIdentifier: NSFileProviderItemIdentifier, request: NSFileProviderRequest) throws -> NSFileProviderEnumerator {
         return FileProviderEnumerator(enumeratedItemIdentifier: containerItemIdentifier)
     }
+
 }

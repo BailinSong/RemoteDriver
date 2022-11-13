@@ -37,16 +37,15 @@ class FileProviderItem: NSObject, NSFileProviderItem {
     
     var parentItemIdentifier: NSFileProviderItemIdentifier {
         var id:NSFileProviderItemIdentifier
-        if fileInfo.parent_file_id == nil || fileInfo.parent_file_id == "" {
-            id = NSFileProviderItemIdentifier.rootContainer
+        
+        if isTrashe {
+            id = .trashContainer
+        }else if fileInfo.parent_file_id == nil || fileInfo.parent_file_id == "" {
+            id = .rootContainer
         }else if fileInfo.parent_file_id == "root" {
-            id = NSFileProviderItemIdentifier.rootContainer
-        }
-        else if fileInfo.trashed ?? false {
-            id = NSFileProviderItemIdentifier.trashContainer
+            id = .rootContainer
         }
         else {
-//            let parentFileId=String(data:try!JSONEncoder().encode(["did":fileInfo.drive_id,"fid":fileInfo.parent_file_id]),encoding: .utf8)
             id = NSFileProviderItemIdentifier(driveId: fileInfo.drive_id!, fileId: fileInfo.parent_file_id!)
         }
         AliSDK.printLog(message: id)
